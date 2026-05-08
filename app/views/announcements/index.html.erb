@@ -1,0 +1,325 @@
+<!-- index.html.erb -->
+
+<!-- SOL İSTATİSTİK -->
+<div class="w-[280px] h-full flex flex-col gap-5">
+
+  <div class="glass rounded-xl p-5 flex items-center gap-4">
+
+    <div class="w-12 h-12 rounded-full bg-slate-900 text-white flex items-center justify-center text-sm font-semibold">
+      MY
+    </div>
+
+    <div>
+      <h3 class="text-sm font-semibold text-slate-800">
+        Merve Yaşar
+      </h3>
+
+      <p class="text-xs text-slate-500">
+        Yönetim Paneli
+      </p>
+    </div>
+
+  </div>
+<div class="glass rounded-xl p-6 flex-1">
+
+  <div class="flex items-center justify-between mb-6">
+    <div>
+      <h3 class="text-sm font-semibold text-slate-800">
+        İlan İstatistikleri
+      </h3>
+
+      <p class="text-xs text-slate-500 mt-1">
+        Güncel pano durumu
+      </p>
+    </div>
+
+    <div class="w-10 h-10 rounded-xl bg-slate-900 text-white flex items-center justify-center text-sm">
+      📊
+    </div>
+  </div>
+
+  <div class="grid grid-cols-2 gap-4">
+
+    <!-- Toplam -->
+    <div class="bg-slate-50 rounded-xl border border-slate-100 p-4 col-span-2">
+      <p class="text-xs text-slate-500 mb-2">
+        Toplam İlan
+      </p>
+
+      <h2 class="text-2xl font-bold text-slate-800">
+        <%= @counters[:total] %>
+      </h2>
+    </div>
+
+    <!-- Acil -->
+    <div class="bg-red-50 rounded-xl border border-red-100 p-4">
+      <p class="text-xs text-red-500 mb-2">
+        Acil
+      </p>
+
+      <h2 class="text-2xl font-bold text-red-600">
+        <%= @counters[:high] %>
+      </h2>
+    </div>
+
+    <!-- Orta -->
+    <div class="bg-amber-50 rounded-xl border border-amber-100 p-4">
+      <p class="text-xs text-amber-600 mb-2">
+        Orta
+      </p>
+
+      <h2 class="text-2xl font-bold text-amber-700">
+        <%= @counters[:medium] %>
+      </h2>
+    </div>
+
+    <!-- Düşük -->
+    <div class="bg-sky-50 rounded-xl border border-sky-100 p-4">
+      <p class="text-xs text-sky-600 mb-2">
+        Düşük
+      </p>
+
+      <h2 class="text-2xl font-bold text-sky-700">
+        <%= @counters[:low] %>
+      </h2>
+    </div>
+
+    <!-- Bugün -->
+    <div class="bg-slate-50 rounded-xl border border-slate-100 p-4 col-span-2">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-xs text-slate-500 mb-1">
+            Bugün Eklenen
+          </p>
+
+          <h2 class="text-2xl font-bold text-slate-800">
+            <%= @counters[:added_today_count] %>
+          </h2>
+        </div>
+
+        <div class="w-12 h-12 rounded-xl bg-slate-900/5 flex items-center justify-center text-xl">
+          ✨
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+</div>
+
+<!-- ORTA PANO -->
+<div class="flex-1 h-full modern-felt rounded-2xl p-8 overflow-y-auto no-scrollbar">
+
+  <div class="mb-8">
+    <p class="text-white/50 uppercase tracking-[0.25em] text-[11px] font-medium">
+      Duyurular
+    </p>
+  </div>
+
+  <div class="grid grid-cols-2 gap-6">
+
+    <% @announcements.each do |announcement| %>
+
+      <% 
+        pin_color = case announcement.importance
+                    when "high" then "bg-red-500"
+                    when "medium" then "bg-amber-400"
+                    else "bg-sky-400"
+                    end
+      %>
+
+      <div class="bg-white rounded-xl p-5 border border-white/10 relative">
+
+        <!-- Pin -->
+        <div class="absolute top-4 right-4 w-2.5 h-2.5 rounded-full <%= pin_color %>"></div>
+
+        <div class="mb-4 pr-5">
+
+          <div class="flex items-start justify-between gap-3">
+
+            <h3 class="font-semibold text-slate-800 text-base leading-6">
+              <%= announcement.title %>
+            </h3>
+
+            <% if announcement.high? %>
+              <span class="text-[10px] bg-red-100 text-red-600 px-2 py-1 rounded-md font-medium whitespace-nowrap">
+                Acil
+              </span>
+            <% end %>
+
+          </div>
+
+        </div>
+
+        <p class="text-sm text-slate-600 leading-6 min-h-[90px]">
+          <%= announcement.content %>
+        </p>
+
+        <div class="mt-5 pt-4 border-t border-slate-100 flex items-center justify-between">
+
+          <div class="flex flex-col">
+            <span class="text-[11px] text-slate-400">
+              Son Tarih
+            </span>
+
+            <span class="text-xs text-slate-700 font-medium">
+              <%= announcement.expires_at&.strftime("%d.%m.%Y") || "Süresiz" %>
+            </span>
+          </div>
+
+          <div class="flex items-center gap-3">
+
+            <%= link_to edit_announcement_path(announcement),
+              class:"text-slate-400 hover:text-slate-700 transition" do %>
+
+              <svg xmlns="http://www.w3.org/2000/svg"
+                   width="18"
+                   height="18"
+                   viewBox="0 0 24 24"
+                   fill="none"
+                   stroke="currentColor"
+                   stroke-width="2">
+
+                <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/>
+                <path d="m15 5 4 4"/>
+
+              </svg>
+
+            <% end %>
+
+            <%= button_to announcement_path(announcement),
+              method: :delete,
+              data: { turbo_confirm: "Silmek istediğine emin misin?" },
+              class:"text-slate-400 hover:text-red-500 transition" do %>
+
+              <svg xmlns="http://www.w3.org/2000/svg"
+                   width="18"
+                   height="18"
+                   viewBox="0 0 24 24"
+                   fill="none"
+                   stroke="currentColor"
+                   stroke-width="2">
+
+                <path d="M3 6h18"/>
+                <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/>
+                <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/>
+                <line x1="10" x2="10" y1="11" y2="17"/>
+                <line x1="14" x2="14" y1="11" y2="17"/>
+
+              </svg>
+
+            <% end %>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    <% end %>
+
+  </div>
+
+</div>
+
+<!-- SAĞ FORM -->
+<div class="w-[320px] h-full">
+
+  <div class="glass rounded-xl p-7 h-full">
+
+    <div class="mb-8">
+
+      <h2 class="text-lg font-semibold text-slate-800">
+        Yeni Duyuru
+      </h2>
+
+      <p class="text-sm text-slate-500 mt-1">
+        Panoya yeni ilan ekle.
+      </p>
+
+    </div>
+
+    <%= form_with model:@announcement,
+      local:true,
+      class:"flex flex-col h-[calc(100%-70px)]" do |f| %>
+
+      <div class="space-y-5 flex-1">
+
+        <div>
+
+          <label class="text-xs font-medium text-slate-500 block mb-2">
+            Başlık
+          </label>
+
+          <%= f.text_field :title,
+            required:true,
+            placeholder:"İlan başlığı",
+            class:"w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none focus:border-slate-400 transition" %>
+
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+
+          <div>
+
+            <label class="text-xs font-medium text-slate-500 block mb-2">
+              Öncelik
+            </label>
+
+            <%= f.select :importance,
+              Announcement.importances.keys.map { |k| [k.titleize, k] },
+              {},
+              class:"w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none" %>
+
+          </div>
+
+          <div>
+
+            <label class="text-xs font-medium text-slate-500 block mb-2">
+              Tarih
+            </label>
+
+            <%= f.date_field :expires_at,
+              class:"w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none" %>
+
+          </div>
+
+        </div>
+
+        <div class="flex-1 flex flex-col">
+
+          <label class="text-xs font-medium text-slate-500 block mb-2">
+            İçerik
+          </label>
+
+          <%= f.text_area :content,
+            required:true,
+            placeholder:"İlan içeriği",
+            class:"flex-1 min-h-[250px] w-full rounded-xl border border-slate-200 bg-white px-4 py-4 text-sm outline-none resize-none focus:border-slate-400 transition" %>
+
+        </div>
+
+      </div>
+
+      <button
+        type="submit"
+        class="w-full mt-6 bg-slate-900 hover:bg-slate-800 text-white py-3 rounded-xl text-sm font-semibold transition"
+      >
+        <%= @announcement.persisted? ? "Kaydet" : "Panoya Ekle" %>
+      </button>
+
+      <% if @announcement.persisted? %>
+
+        <%= link_to "Vazgeç",
+          root_path,
+          class:"text-center text-xs text-slate-400 mt-4 hover:text-slate-600 transition" %>
+
+      <% end %>
+
+    <% end %>
+
+  </div>
+
+</div>

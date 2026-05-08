@@ -1,0 +1,91 @@
+<!-- application.html.erb -->
+
+<!DOCTYPE html>
+<html lang="tr" class="h-full">
+<head>
+  <title>Bina Panosu</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+    rel="stylesheet"
+  >
+
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+  <style>
+    *{
+      font-family: 'Inter', sans-serif;
+    }
+
+    body{
+      background:#f4f4f5;
+      overflow:hidden;
+    }
+
+    .glass{
+      background:rgba(255,255,255,0.92);
+      backdrop-filter:blur(6px);
+      -webkit-backdrop-filter:blur(6px);
+
+      border:1px solid rgba(15,23,42,0.05);
+
+      box-shadow:
+        0 4px 20px rgba(15,23,42,0.04);
+    }
+
+    .modern-felt{
+      background:#7f1d1d;
+      border:1px solid rgba(255,255,255,0.05);
+
+      box-shadow:
+        inset 0 2px 8px rgba(0,0,0,0.14);
+    }
+
+    .no-scrollbar::-webkit-scrollbar{
+      display:none;
+    }
+
+    .no-scrollbar{
+      -ms-overflow-style:none;
+      scrollbar-width:none;
+    }
+  </style>
+</head>
+
+<body class="h-full p-6">
+
+  <div class="max-w-[1500px] mx-auto h-full flex gap-6">
+    <%= yield %>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+
+      const notice = '<%= j flash[:notice] %>';
+      const alert  = '<%= j flash[:alert] %>';
+
+      if(notice){
+        Swal.fire({
+          icon:'success',
+          title:'Başarılı',
+          text:notice,
+          confirmButtonColor:'#0f172a'
+        });
+      }
+
+      if(alert){
+        Swal.fire({
+          icon:'error',
+          title:'Hata',
+          text:alert,
+          confirmButtonColor:'#0f172a'
+        });
+      }
+
+    });
+  </script>
+
+</body>
+</html>
