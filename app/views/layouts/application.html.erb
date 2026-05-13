@@ -6,13 +6,12 @@
   <title>Bina Panosu</title>
 
   <script src="https://cdn.tailwindcss.com"></script>
+  <meta name="turbo-cache-control" content="no-cache">
 
   <link
     href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
     rel="stylesheet"
   >
-
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
   <style>
     *{
@@ -52,40 +51,19 @@
       scrollbar-width:none;
     }
   </style>
+    <%= javascript_importmap_tags %>
 </head>
 
 <body class="h-full p-6">
+  <div class="fixed top-5 right-5 z-50 w-80">
+    <%= render 'layouts/flash' %>
+  </div>
 
   <div class="max-w-[1500px] mx-auto h-full flex gap-6">
     <%= yield %>
   </div>
+  
 
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-
-      const notice = '<%= j flash[:notice] %>';
-      const alert  = '<%= j flash[:alert] %>';
-
-      if(notice){
-        Swal.fire({
-          icon:'success',
-          title:'Başarılı',
-          text:notice,
-          confirmButtonColor:'#0f172a'
-        });
-      }
-
-      if(alert){
-        Swal.fire({
-          icon:'error',
-          title:'Hata',
-          text:alert,
-          confirmButtonColor:'#0f172a'
-        });
-      }
-
-    });
-  </script>
 
 </body>
 </html>
